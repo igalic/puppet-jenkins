@@ -13,7 +13,7 @@ class jenkins::slave (
   $slave_user = $jenkins::params::slave_user,
   $slave_uid = undef,
   $slave_home = $jenkins::params::slave_home,
-  java_package = $jenkins::params::java_package
+  $java_package = $jenkins::params::java_package
 ) inherits jenkins::params {
 
   $client_jar = "swarm-client-${version}-jar-with-dependencies.jar"
