@@ -10,6 +10,7 @@ class jenkins::slave (
   $version = '1.8',
   $executors = 2,
   $manage_slave_user = 1,
+  $manage_java_package = 1,
   $slave_user = $jenkins::params::slave_user,
   $slave_uid = undef,
   $slave_home = $jenkins::params::slave_home,
@@ -40,10 +41,6 @@ class jenkins::slave (
       home       => $slave_home,
       managehome => true,
     }
-  }
-
-  package { $java_package:
-    ensure => installed;
   }
 
   exec { 'get_swarm_client':
@@ -90,8 +87,18 @@ class jenkins::slave (
     hasrestart => true,
   }
 
-  Package[ $java_package ]
-  -> Exec['get_swarm_client']
-  -> Service['jenkins-slave']
+  if $manage_java_package {
+
+    package { $java_package:
+      ensure => installed;
+    }
+
+    Package[ $java_package ]
+    -> Exec['get_swarm_client']
+    -> Service['jenkins-slave']
+  } else {
+      Exec['get_swarm_client']
+      -> Service['jenkins-slave']
+  }
 
 }
