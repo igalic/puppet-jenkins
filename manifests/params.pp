@@ -17,6 +17,5 @@ class jenkins::params {
     default: {
       fail ('Currently unsupported OS! Please fork this module and extend it!')
     }
-
-
+  }
 }
